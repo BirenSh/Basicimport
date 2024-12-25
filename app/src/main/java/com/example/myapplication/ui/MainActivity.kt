@@ -1,6 +1,8 @@
-package com.example.myapplication
+package com.example.myapplication.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -8,10 +10,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.R
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.viewmodels.MainViewModel
 import com.example.practice.models.Quotes
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -19,8 +21,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    private val mainViewModel:MainViewModel by viewModels()
-    lateinit var  quoteAdapter : QuoteAdapter
+    private val mainViewModel: MainViewModel by viewModels()
+    lateinit var quoteAdapter: QuoteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,33 +36,12 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        quoteAdapter = QuoteAdapter {selectedQuote->
-            mainViewModel.editQuote(selectedQuote,Quotes("",1,"changed"))
-        }
+        showQuoteList()
 
-        binding.recyclerView.adapter = quoteAdapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-//
-        lifecycleScope.launch {
-            mainViewModel.getQuotes()
-        }
+    }
 
-        mainViewModel.listOfQuote.observe(this){
-            quoteAdapter.fetchQuotes(it)
-            binding.quoteSize.text = "total Quote: ${it.size}"
-        }
-
-        lifecycleScope.launch {
-            delay(5000)
-            val listOfQuote = mutableListOf(
-                Quotes(author = "", id = 0, quote = "test1"),
-                Quotes(author = "", id = 1, quote = "test2"),
-                Quotes(author = "", id = 2, quote = "test3")
-            )
-            mainViewModel.addQuotes(listOfQuote)
-        }
-
-
-
+    private fun showQuoteList() {
+        supportFragmentManager.beginTransaction()
+            .replace(binding.fragmentContainerView.id, QuoteFragment()).commit()
     }
 }

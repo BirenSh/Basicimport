@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,14 +8,15 @@ import com.example.myapplication.databinding.SimpleListBinding
 import com.example.myapplication.diff.QuoteDiff
 import com.example.practice.models.Quotes
 
-class QuoteAdapter(private val onClickCallback:(Int)->Unit) : RecyclerView.Adapter<QuoteAdapter.MyViewHolder>(){
+class QuoteAdapter() : RecyclerView.Adapter<QuoteAdapter.MyViewHolder>(){
+    var onClickCallback:((Int)->Unit)? = null
     private val listOfQuotes = mutableListOf<Quotes>()
     inner class MyViewHolder(private val simpleListBinding: SimpleListBinding)
         :RecyclerView.ViewHolder(simpleListBinding.root){
         fun bind(quotes: Quotes){
             simpleListBinding.textView.text = quotes.quote
             simpleListBinding.textView.setOnClickListener {
-                onClickCallback.invoke(adapterPosition)
+                onClickCallback?.invoke(adapterPosition)
             }
         }
     }
@@ -40,5 +41,7 @@ class QuoteAdapter(private val onClickCallback:(Int)->Unit) : RecyclerView.Adapt
         listOfQuotes.addAll(quotes)
         diffResult.dispatchUpdatesTo(this)
     }
+
+
 
 }

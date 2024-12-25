@@ -15,6 +15,9 @@ class MainViewModel @Inject constructor(private val networkRepository: NetworkRe
     val listOfQuote:LiveData<List<Quotes>>
         get() = _listOfQuote
 
+    private val _filteredQuotes = MutableLiveData<List<Quotes>>()
+    val filteredQuotes: LiveData<List<Quotes>> get() = _filteredQuotes
+
     suspend fun getQuotes(){
         val response = networkRepository.getQuotes()
         if (response.isSuccessful && response.body() != null){
@@ -44,5 +47,15 @@ class MainViewModel @Inject constructor(private val networkRepository: NetworkRe
             listOfOld[posiiton] = quote
         }
         _listOfQuote.postValue(listOfOld)
+    }
+
+    fun filterQuote(quote:String){
+        val fullList = _listOfQuote.value.orEmpty()
+        if (quote.isEmpty()){
+            _filteredQuotes.postValue(fullList)
+        }else{
+            val filter = fullList.filter { it.quote.contains(quote,true) }
+            _filteredQuotes.postValue(filter)
+        }
     }
 }

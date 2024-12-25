@@ -46,6 +46,7 @@ dependencies {
     kapt(libs.hilt.android.compiler)
 
     implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
 
     //retrifit
     implementation(libs.retrofit.android)
