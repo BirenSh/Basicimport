@@ -12,8 +12,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(private val networkRepository: NetworkRepository) :ViewModel() {
 
     private val _listOfQuote = MutableLiveData<List<Quotes>>()
-    val listOfQuote:LiveData<List<Quotes>>
-        get() = _listOfQuote
+    val listOfQuote:LiveData<List<Quotes>> get() = _listOfQuote
 
     private val _filteredQuotes = MutableLiveData<List<Quotes>>()
     val filteredQuotes: LiveData<List<Quotes>> get() = _filteredQuotes
